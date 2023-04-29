@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.avisys.cim.Customer;
+import com.avisys.cim.dto.CustomerDTO;
 import com.avisys.cim.service.CustomerService;
 
 
@@ -57,7 +58,7 @@ public class CustomerController {
     }
     
     
- // POST endpoint to create a new customer
+  //methode for creating new customer
     @PostMapping
     public ResponseEntity<String> createCustomer(@RequestBody Customer customer) {
         try {
@@ -73,4 +74,19 @@ public class CustomerController {
         }
     }
     
+  //methode for creating new customer after updating
+    @PostMapping("/updated")
+    public ResponseEntity<String> createCustomerTwo(@RequestBody CustomerDTO customer) {
+	Customer customer1 = new Customer();
+    customer1.setFirstName(customer.getFirstName());
+    customer1.setLastName(customer.getLastName());
+    for (String number : customer.getMobileNumbers()) {
+        customer1.addMobileNumber(number);
+    }
+    
+	return customerService.createCustomerTwo(customer1);
+        
+    }
+    
+   
 }
