@@ -1,9 +1,12 @@
 package com.avisys.cim.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.avisys.cim.Customer;
 import com.avisys.cim.repo.CustomerRepository;
@@ -40,4 +43,18 @@ public class CustomerService {
             return customerRepository.findAll();
         }
     }
+    
+   
+    // Method to create a new customer
+    public void createCustomer(Customer customer) {
+        customerRepository.save(customer);
+    }
+
+    // Method to find a customer by mobile number
+    public Customer findByMobileNumber(String mobileNumber) {
+        return customerRepository.findByMobileNumber(mobileNumber);
+    }
+
+   
+  
 }

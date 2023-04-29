@@ -3,14 +3,18 @@ package com.avisys.cim.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.avisys.cim.Customer;
 import com.avisys.cim.service.CustomerService;
+
 
 @RestController
 @RequestMapping("/customers")
@@ -50,6 +54,23 @@ public class CustomerController {
     public ResponseEntity<List<Customer>> getCustomersByFirstNameAndLastName(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName) {
         List<Customer> customers = customerService.getCustomersByFirstNameAndLastName(firstName, lastName);
         return ResponseEntity.ok(customers);
+    }
+    
+    
+ // POST endpoint to create a new customer
+    @PostMapping
+    public ResponseEntity<String> createCustomer(@RequestBody Customer customer) {
+        try {
+            // Check if mobile number already exists in database
+            if (customerService.findByMobileNumber(customer.getMobileNumber()) != null) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Unable to create Customer. Mobile number already present.");
+            }
+            // Create new customer
+            customerService.createCustomer(customer);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Customer created successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Unable to create Customer. " + e.getMessage());
+        }
     }
     
 }
