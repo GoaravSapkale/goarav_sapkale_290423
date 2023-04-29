@@ -72,7 +72,14 @@ public class CustomerService {
         return customerRepository.findByMobileNumber(mobileNumber);
     }
 
-   
+    public boolean deleteCustomerByMobileNumber(String mobileNumber) {
+        Customer customer = customerRepository.findByMobileNumber(mobileNumber);
+        if (customer == null) {
+            return false;
+        }
+        customerRepository.delete(customer);
+        return true;
+    }
    
   
 }
