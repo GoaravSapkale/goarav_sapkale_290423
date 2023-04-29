@@ -72,6 +72,7 @@ public class CustomerService {
         return customerRepository.findByMobileNumber(mobileNumber);
     }
 
+  //methode for delete customer by mobile number
     public boolean deleteCustomerByMobileNumber(String mobileNumber) {
         Customer customer = customerRepository.findByMobileNumber(mobileNumber);
         if (customer == null) {
@@ -81,5 +82,20 @@ public class CustomerService {
         return true;
     }
    
+    public boolean updateMobileNumber(String mobileNumber, String newMobileNumber) {
+        Customer customer = customerRepository.findByMobileNumber(mobileNumber);
+        if (customer != null) {
+            if (customer.getMobileNumber().contains(newMobileNumber)) {
+                return false; // New mobile number already exists for the customer
+            } else {
+                customer.addMobileNumber(newMobileNumber);
+                customerRepository.save(customer);
+                return true; // Mobile number updated successfully
+            }
+        } else {
+            return false; // Customer not found with given mobile number
+        }
+    }
+
   
 }
